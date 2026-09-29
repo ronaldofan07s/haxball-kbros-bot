@@ -1,4 +1,4 @@
-import HaxballJS from 'haxball.js';
+const HaxballJS = require('haxball.js').default;
 
 HaxballJS().then((HBInit) => {
   const room = HBInit({
@@ -6,10 +6,15 @@ HaxballJS().then((HBInit) => {
     maxPlayers: 16,
     public: true,
     geo: { code: "ar", lat: -31.416, lon: -64.183 },
-    botName: "sacatangas"
+    token: "thr1.AAAAAGq8QQ1Ci3xHrSe2qg.CYlSYxz3GjU",
+    noPlayer: true
   });
 
   console.log("¡Sala 'los kbros sala oficial' iniciada con éxito!");
+
+  room.onRoomLink = (link) => {
+    console.log("Link de la sala:", link);
+  };
 
   room.onPlayerJoin = (player) => {
     if (player.name.toUpperCase().includes("NARDOWSKI")) {
