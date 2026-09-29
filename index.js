@@ -1,18 +1,28 @@
+const http = require('http');
 const HBInit = require('haxball.js');
 
+// 1. Servidor HTTP re trucho solo para que Render no tire error de puertos
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Bot HaxBall de los kbros activo 24/7!\n');
+});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Servidor web interno corriendo en el puerto ${PORT}`);
+});
+
+// 2. Inicialización del bot de HaxBall (sacatangas)
 HBInit({
   roomName: "los kbros sala oficial",
   maxPlayers: 16,
   public: true,
   geo: { code: "ar", lat: -31.416, lon: -64.183 },
-  // Nombre oficial que identificará al bot en la sala
   botName: "sacatangas" 
 }).then((room) => {
   console.log("¡Sala 'los kbros sala oficial' iniciada con éxito!");
 
-  // Evento cuando entra un jugador
   room.onPlayerJoin = (player) => {
-    // Si el jugador que entra es NARDOWSKI (cxnnard)
     if (player.name.toUpperCase().includes("NARDOWSKI")) {
       room.setPlayerAdmin(player.id, true);
       room.sendAnnouncement(`👑 ¡Atención! El jefe supremo NARDOWSKI ha entrado a la sala.`, null, 0xFFD700, "bold", 2);
@@ -21,7 +31,6 @@ HBInit({
     }
   };
 
-  // Mensajes automáticos cada 3 minutos (180,000 milisegundos)
   const INTERVALO = 3 * 60 * 1000;
   const mensajes = [
     "📢 Unite al Discord de la comunidad: https://discord.gg/MeRvuRBvQk",
