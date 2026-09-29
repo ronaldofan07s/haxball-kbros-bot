@@ -1,8 +1,6 @@
-(async () => {
-  const HaxballJS = (await import('haxball.js')).default;
+import HaxballJS from 'haxball.js';
 
-  const HBInit = await HaxballJS();
-
+HaxballJS().then((HBInit) => {
   const room = HBInit({
     roomName: "🟣 • los kbros sala oficial",
     maxPlayers: 16,
@@ -35,6 +33,6 @@
     index = (index + 1) % mensajes.length;
   }, INTERVALO);
 
-})().catch((err) => {
+}).catch((err) => {
   console.error("Error al iniciar HaxballJS:", err);
 });
