@@ -1,12 +1,18 @@
 import HaxballJS from 'haxball.js';
 
+const token = process.env.HAXBALL_TOKEN;
+
+if (!token) {
+  throw new Error("Falta configurar HAXBALL_TOKEN en el servidor.");
+}
+
 HaxballJS().then((HBInit) => {
   const room = HBInit({
     roomName: "🟣 • los kbros sala oficial",
     maxPlayers: 16,
     public: true,
     geo: { code: "ar", lat: -31.416, lon: -64.183 },
-    token: "thr1.AAAAAGq8QQ1Ci3xHrSe2qg.CYlSYxz3GjU",
+    token,
     noPlayer: true
   });
 
@@ -17,27 +23,49 @@ HaxballJS().then((HBInit) => {
   };
 
   room.onPlayerJoin = (player) => {
-    if (player.name.toUpperCase().includes("NARDOWSKI")) {
+    const nombre = player.name.trim().toUpperCase();
+
+    if (nombre === "NARDOSKI") {
       room.setPlayerAdmin(player.id, true);
-      room.sendAnnouncement("👑 ¡Atención! El jefe supremo NARDOWSKI ha entrado a la sala.", null, 0xFFD700, "bold", 2);
+      room.sendAnnouncement(
+        "👑 ¡NARDOSKI entró a la sala y recibió superadmin!",
+        null,
+        0xFFD700,
+        "bold",
+        2
+      );
     } else {
-      room.sendAnnouncement(`¡Bienvenido a los kbros, ${player.name}! Disfrutá del fulbito.`, player.id, 0x00FF00, "normal", 1);
+      room.sendAnnouncement(
+        "¡Bienvenido a la sala de los kbros oficial, " + player.name + "!",
+        player.id,
+        0x00FF00,
+        "normal",
+        1
+      );
     }
   };
 
   const INTERVALO = 3 * 60 * 1000;
+
   const mensajes = [
-    "📢 Unite al Discord de la comunidad: https://discord.gg/MeRvuRBvQk",
-    "📱 Sumate al canal de WhatsApp de los kbros: https://whatsapp.com/channel/0029VbDE6uH6LwHgmDbwoD2q",
-    "🔴 Pasate por el Twitch de cxnnard y dejá tu follow: https://www.twitch.tv/cxnnard"
+    "📢 [sacatangas] Discord de los KBROS: https://discord.gg/MeRvuRBvQk",
+    "📱 [sacatangas] Canal de WhatsApp de los KBROS: https://whatsapp.com/channel/0029VbDE6uH6LwHgmDbwoD2q",
+    "🔴 [sacatangas] Twitch de CXNNARD: https://www.twitch.tv/cxnnard"
   ];
 
   let index = 0;
+
   setInterval(() => {
-    room.sendAnnouncement(`[sacatangas] ${mensajes[index]}`, null, 0x00BFFF, "bold", 1);
+    room.sendAnnouncement(
+      mensajes[index],
+      null,
+      0x00BFFF,
+      "bold",
+      1
+    );
+
     index = (index + 1) % mensajes.length;
   }, INTERVALO);
-
 }).catch((err) => {
-  console.error("Error al iniciar HaxballJS:", err);
+  console.error("Error al iniciar HaxBallJS:", err);
 });
