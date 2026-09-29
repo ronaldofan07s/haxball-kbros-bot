@@ -1,0 +1,24 @@
+name: HaxBall Bot 24/7
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */5 * * *' # Intenta reiniciar/mantener cada 5 horas
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar el bot de HaxBall
+        run: node index.js
