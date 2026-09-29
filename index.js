@@ -1,7 +1,6 @@
 const http = require('http');
 const HBInit = require('haxball.js');
 
-// 1. Servidor HTTP re trucho solo para que Render no tire error de puertos
 const server = http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
   res.end('Bot HaxBall de los kbros activo 24/7!\n');
@@ -12,13 +11,12 @@ server.listen(PORT, () => {
   console.log(`Servidor web interno corriendo en el puerto ${PORT}`);
 });
 
-// 2. Inicialización del bot de HaxBall (sacatangas)
 HBInit({
   roomName: "los kbros sala oficial",
   maxPlayers: 16,
   public: true,
   geo: { code: "ar", lat: -31.416, lon: -64.183 },
-  botName: "sacatangas" 
+  botName: "sacatangas"
 }).then((room) => {
   console.log("¡Sala 'los kbros sala oficial' iniciada con éxito!");
 
