@@ -1,14 +1,12 @@
-const HaxballJS = require('haxball.js').default;
+const HBInit = require('haxball.js');
 
-HaxballJS().then((HBInit) => {
-  const room = HBInit({
-    roomName: "🟣 • los kbros sala oficial",
-    maxPlayers: 16,
-    public: true,
-    geo: { code: "ar", lat: -31.416, lon: -64.183 },
-    botName: "sacatangas"
-  });
-
+HBInit({
+  roomName: "🟣 • los kbros sala oficial",
+  maxPlayers: 16,
+  public: true,
+  geo: { code: "ar", lat: -31.416, lon: -64.183 },
+  botName: "sacatangas"
+}).then((room) => {
   console.log("¡Sala 'los kbros sala oficial' iniciada con éxito!");
 
   room.onPlayerJoin = (player) => {
@@ -34,5 +32,5 @@ HaxballJS().then((HBInit) => {
   }, INTERVALO);
 
 }).catch((err) => {
-  console.error("Error al iniciar HaxballJS:", err);
+  console.error("Error al iniciar la sala:", err);
 });
