@@ -3,8 +3,6 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { Utils, Room } = require('node-haxball')();
 
-// Tu sala actual. Si más adelante HaxBall te da otro link, podés reemplazarlo
-// creando la variable HAXBALL_ROOM_LINK en Northflank.
 const ROOM_LINK = process.env.HAXBALL_ROOM_LINK || 'https://www.haxball.com/play?c=7T20JsIjnkY';
 const ROOM_PASSWORD = process.env.HAXBALL_ROOM_PASSWORD || null;
 const ROOM_ID = new URL(ROOM_LINK).searchParams.get('c');
@@ -20,7 +18,6 @@ const mensajes = [
 ];
 
 let reconnectTimer = null;
-let connected = false;
 
 function programarReintento() {
   if (reconnectTimer) return;
@@ -32,9 +29,9 @@ function programarReintento() {
 }
 
 function conectar() {
-  console.log(`sacatangas intentando entrar a la sala ${ROOM_ID}...`);
+  console.log(`🤖 sacatangas intentando entrar a la sala ${ROOM_ID}...`);
 
-  Utils.generateAuth().then(([, authObj]) => {
+  Utils.generateAuth().then(([authKey, authObj]) => {
     Room.join(
       {
         id: ROOM_ID,
@@ -44,11 +41,11 @@ function conectar() {
       {
         storage: {
           player_name: 'sacatangas',
-          avatar: '📢'
+          avatar: '📢',
+          player_auth_key: authKey
         },
 
         onOpen: (room) => {
-          connected = true;
           console.log(`✅ sacatangas entró a: ${room.name}`);
           room.sendChat('🤖 sacatangas conectado a la sala de los kbros.');
 
@@ -66,32 +63,25 @@ function conectar() {
 
           let index = 0;
 
-          const enviarPromocion = () => {
-            if (!connected) return;
+          setInterval(() => {
             room.sendChat(`📣 [sacatangas] ${mensajes[index]}`);
             index = (index + 1) % mensajes.length;
-          };
-
-          // Primera promoción 3 minutos después de entrar.
-          setInterval(enviarPromocion, 3 * 60 * 1000);
+          }, 3 * 60 * 1000);
 
           room.onClose = (error) => {
-            connected = false;
             console.log('⚠️ sacatangas salió de la sala:', error || 'sala cerrada');
             programarReintento();
           };
         },
 
         onClose: (error) => {
-          connected = false;
-          console.log('⚠️ No se pudo mantener la conexión:', error || 'conexión cerrada');
+          console.log('⚠️ Conexión cerrada:', error || 'motivo desconocido');
           programarReintento();
         }
       }
     );
   }).catch((err) => {
-    connected = false;
-    console.error('❌ No se pudo conectar sacatangas:', err);
+    console.error('❌ Error preparando la conexión:', err);
     programarReintento();
   });
 }
