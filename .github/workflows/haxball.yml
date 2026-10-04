@@ -1,13 +1,12 @@
-name: HaxBall Bot 24/7
+name: Probar sacatangas
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 */5 * * *'
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
+
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v4
@@ -20,5 +19,7 @@ jobs:
       - name: Instalar dependencias
         run: npm install
 
-      - name: Ejecutar el bot de HaxBall
-        run: node index.js
+      - name: Ejecutar sacatangas
+        env:
+          HAXBALL_ROOM_LINK: ${{ secrets.HAXBALL_ROOM_LINK }}
+        run: npm start
